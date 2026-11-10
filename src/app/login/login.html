@@ -1,0 +1,47 @@
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Connexion</h1>
+        <p>Accedez a votre stock personnel.</p>
+
+        <form (ngSubmit)="handleLogIn()">
+            <label for="username">Email</label>
+            <input
+                id="username"
+                name="username"
+                type="email"
+                title="Email"
+                placeholder="email@exemple.com"
+                [(ngModel)]="username"
+                required
+            />
+
+            <label for="password">Mot de passe</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                title="Mot de passe"
+                placeholder="Votre mot de passe"
+                [(ngModel)]="password"
+                required
+            />
+
+            @if (errorMessage) {
+                <p class="error">{{ errorMessage }}</p>
+            }
+
+            <button type="submit" [disabled]="loading">
+                @if (loading) {
+                    Connexion...
+                } @else {
+                    Se connecter
+                }
+            </button>
+        </form>
+
+        <p class="redirect">
+            Pas encore de compte ?
+            <a routerLink="/sign-in">Creer un compte</a>
+        </p>
+    </div>
+</div>

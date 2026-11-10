@@ -1,1 +1,21 @@
-<router-outlet />
+<header class="topbar">
+	<a class="brand" routerLink="/stock">My Pantry</a>
+
+	<nav class="menu">
+		@if (isLoggedIn$ | async) {
+			<a routerLink="/stock" routerLinkActive="active">Stock</a>
+			<a routerLink="/add-product" routerLinkActive="active">Add Product</a>
+		} @else {
+			<a routerLink="/login" routerLinkActive="active">Login</a>
+			<a routerLink="/sign-in" routerLinkActive="active">Sign In</a>
+		}
+	</nav>
+
+	@if (isLoggedIn$ | async) {
+		<button type="button" class="logout" (click)="logout()">Log out</button>
+	}
+</header>
+
+<main class="page-content">
+	<router-outlet />
+</main>

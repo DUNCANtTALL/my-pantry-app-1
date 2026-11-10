@@ -13,6 +13,7 @@ import { finalize } from 'rxjs';
 
 import { MyPantryProduct, OpenFoodFactsProduct } from '../models';
 import { OpenFoodFactsService } from '../openFoodFacts.service';
+import { Mypantry } from '../mypantry';
 
 @Component({
   selector: 'app-add-product',
@@ -32,6 +33,7 @@ import { OpenFoodFactsService } from '../openFoodFacts.service';
 })
 export class AddProductComponent {
   private readonly foodService = inject(OpenFoodFactsService);
+  private readonly myPantryService = inject(Mypantry);
 
   readonly product = signal<OpenFoodFactsProduct | undefined>(undefined);
   readonly errorMessage = signal<string | undefined>(undefined);
@@ -51,12 +53,20 @@ export class AddProductComponent {
       return;
     }
 
+    const normalizedBarcode = trimmedBarcode.replace(/\s+/g, '');
+
+    // OpenFoodFacts barcodes are numeric (EAN/UPC). Prevent malformed requests.
+    if (!/^\d{8,14}$/.test(normalizedBarcode)) {
+      this.errorMessage.set('Code-barres invalide. Utilisez 8 a 14 chiffres.');
+      return;
+    }
+
     this.product.set(undefined);
     this.errorMessage.set(undefined);
     this.searching.set(true);
 
     this.foodService
-      .getProduct(trimmedBarcode)
+      .getProduct(normalizedBarcode)
       .pipe(finalize(() => this.searching.set(false)))
       .subscribe({
         next: ({ product }) => {
@@ -68,7 +78,7 @@ export class AddProductComponent {
       });
   }
 
-  addProduct(): void {
+  async addProduct(barcode: string): Promise<void> {
     const product = this.product();
 
     if (!product) {
@@ -97,6 +107,19 @@ export class AddProductComponent {
       minThreshold,
       storagePlace: this.storagePlace(),
     };
+    await this.myPantryService.addProduct({
+      name: myPantryProduct.product.product_name ?? 'Produit sans nom',
+      product_name: myPantryProduct.product.product_name,
+      brands: myPantryProduct.product.brands,
+      image_front_url: myPantryProduct.product.image_front_url,
+      code: myPantryProduct.product.code ?? barcode.trim(),
+      categories: myPantryProduct.product.categories,
+      nutriscore_grade: myPantryProduct.product.nutriscore_grade,
+      quantity: myPantryProduct.quantity,
+      unit: myPantryProduct.unit,
+      location: myPantryProduct.storagePlace,
+      minQuantity: myPantryProduct.minThreshold,
+    });
 
     console.log('Produit à ajouter au stock :', myPantryProduct);
   }

@@ -1,0 +1,136 @@
+@if (products$ | async; as products) {
+	@if (products.length) {
+		<div>
+			@for (product of products; track product.id) {
+			<div class="product-result">
+          <img
+            class="product-image"
+            title="Produit du stock"
+            [src]="product.product?.image_front_url || product.image_front_url || 'https://placehold.co/280x280?text=No+Image'"
+            [attr.alt]="product.product?.product_name || product.product_name || product.name"
+            [attr.title]="product.product?.product_name || product.product_name || product.name"
+          />
+
+          <div class="product-info">
+            @if (product.product?.brands || product.brands) {
+              <span class="product-brand">
+                {{ product.product?.brands || product.brands }}
+              </span>
+            }
+
+            <h2>{{ product.product?.product_name || product.product_name || product.name }}</h2>
+
+            @if (product.product?.categories || product.categories) {
+              <span class="product-category">
+                {{ product.product?.categories || product.categories }}
+              </span>
+            }
+
+            <span class="barcode">
+              {{ product.product?.code || product.code || 'Code indisponible' }}
+            </span>
+
+            <span>
+              Quantite : {{ product.quantity }} {{ product.unit }}
+            </span>
+
+            <span>
+              Emplacement : {{ product.location }}
+            </span>
+
+            <span>
+              Seuil minimum : {{ product.minQuantity }}
+            </span>
+
+            @if (product.product?.nutriscore_grade || product.nutriscore_grade) {
+              <span>
+                Nutriscore :
+                {{ product.product?.nutriscore_grade || product.nutriscore_grade | uppercase }}
+              </span>
+            }
+
+            <div class="actions">
+              <button type="button" (click)="startEdit(product)">Modifier</button>
+              <button
+                type="button"
+                (click)="deleteProduct(product.id)"
+                [disabled]="pendingDeleteId() === product.id"
+              >
+                @if (pendingDeleteId() === product.id) {
+                  Suppression...
+                } @else {
+                  Supprimer
+                }
+              </button>
+            </div>
+
+            @if (editingId() === product.id && editDraft(); as draft) {
+              <div class="edit-form">
+                <label>
+                  Quantite
+                  <input
+                    type="number"
+                    min="0"
+                    title="Quantite"
+                    placeholder="Quantite"
+                    [(ngModel)]="draft.quantity"
+                  />
+                </label>
+
+                <label>
+                  Unite
+                  <select [(ngModel)]="draft.unit" title="Unite">
+                    <option value="piece">piece</option>
+                    <option value="kg">kg</option>
+                    <option value="g">g</option>
+                    <option value="l">l</option>
+                    <option value="cl">cl</option>
+                  </select>
+                </label>
+
+                <label>
+                  Emplacement
+                  <select [(ngModel)]="draft.location" title="Emplacement">
+                    <option value="closet">closet</option>
+                    <option value="fridge">fridge</option>
+                    <option value="freezer">freezer</option>
+                  </select>
+                </label>
+
+                <label>
+                  Seuil minimum
+                  <input
+                    type="number"
+                    min="0"
+                    title="Seuil minimum"
+                    placeholder="Seuil minimum"
+                    [(ngModel)]="draft.minQuantity"
+                  />
+                </label>
+
+                <div class="edit-actions">
+                  <button
+                    type="button"
+                    (click)="saveEdit(product.id)"
+                    [disabled]="pendingSaveId() === product.id"
+                  >
+                    @if (pendingSaveId() === product.id) {
+                      Enregistrement...
+                    } @else {
+                      Enregistrer
+                    }
+                  </button>
+                  <button type="button" (click)="cancelEdit()">Annuler</button>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+			}
+		</div>
+	} @else {
+		<p>Aucun produit dans le stock.</p>
+	}
+} @else {
+	<p>Chargement du stock...</p>
+}

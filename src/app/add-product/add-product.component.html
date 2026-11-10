@@ -49,8 +49,9 @@
         <div class="product-result">
           <img
             class="product-image"
+            title="Produit recherché"
             [src]="myProduct.image_front_url"
-            [alt]="myProduct.product_name"
+            [attr.alt]="myProduct.product_name || 'Produit recherché'"
           />
 
           <div class="product-info">
@@ -99,6 +100,7 @@
             <mat-label>Quantité</mat-label>
             <input
               matInput
+              title="Quantité"
               type="number"
               min="0"
               [(ngModel)]="quantity"
@@ -122,6 +124,7 @@
 
             <input
               matInput
+              title="Date de péremption"
               type="date"
               [(ngModel)]="expirationDate"
             />
@@ -132,6 +135,7 @@
 
             <input
               matInput
+              title="Seuil minimum"
               type="number"
               min="0"
               [(ngModel)]="minThreshold"
@@ -153,7 +157,7 @@
           <button
             mat-flat-button
             color="primary"
-            (click)="addProduct()"
+            (click)="addProduct(barcode.value)"
           >
             <mat-icon>add</mat-icon>
             Ajouter au stock

@@ -1,0 +1,81 @@
+.auth-page {
+	min-height: 100vh;
+	display: grid;
+	place-items: center;
+	padding: 24px;
+	background: radial-gradient(circle at top, #ffe1b8 0%, #fff6ea 45%, #fefefe 100%);
+}
+
+.auth-card {
+	width: min(420px, 100%);
+	background: #ffffff;
+	border: 1px solid #f0d6b6;
+	border-radius: 18px;
+	padding: 28px;
+	box-shadow: 0 20px 40px rgba(88, 47, 12, 0.1);
+}
+
+.auth-card h1 {
+	margin: 0 0 6px;
+	font-size: 2rem;
+}
+
+.auth-card p {
+	margin: 0 0 16px;
+	color: #674c34;
+}
+
+form {
+	display: grid;
+	gap: 10px;
+}
+
+label {
+	font-weight: 600;
+	color: #3d2a18;
+}
+
+input {
+	border: 1px solid #d9c2a5;
+	border-radius: 10px;
+	padding: 10px 12px;
+	font-size: 0.95rem;
+}
+
+input:focus {
+	outline: 2px solid #f5a546;
+	border-color: #f5a546;
+}
+
+button {
+	margin-top: 4px;
+	border: 0;
+	border-radius: 10px;
+	padding: 11px 14px;
+	background: #e17a1a;
+	color: white;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+button:disabled {
+	cursor: not-allowed;
+	opacity: 0.75;
+}
+
+.error {
+	margin: 4px 0;
+	color: #b42318;
+	font-weight: 600;
+}
+
+.redirect {
+	margin-top: 14px;
+	font-size: 0.95rem;
+}
+
+.redirect a {
+	color: #cb5f00;
+	font-weight: 700;
+	text-decoration: none;
+}

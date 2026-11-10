@@ -1,0 +1,47 @@
+<div class="auth-page">
+    <div class="auth-card">
+        <h1>Inscription</h1>
+        <p>Creez votre compte pour acceder a votre pantry.</p>
+
+        <form (ngSubmit)="handleSignIn()">
+            <label for="username">Email</label>
+            <input
+                id="username"
+                name="username"
+                type="email"
+                title="Email"
+                placeholder="email@exemple.com"
+                [(ngModel)]="username"
+                required
+            />
+
+            <label for="password">Mot de passe</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                title="Mot de passe"
+                placeholder="Votre mot de passe"
+                [(ngModel)]="password"
+                required
+            />
+
+            @if (errorMessage) {
+                <p class="error">{{ errorMessage }}</p>
+            }
+
+            <button type="submit" [disabled]="loading">
+                @if (loading) {
+                    Inscription...
+                } @else {
+                    Creer un compte
+                }
+            </button>
+        </form>
+
+        <p class="redirect">
+            Vous avez deja un compte ?
+            <a routerLink="/login">Se connecter</a>
+        </p>
+    </div>
+</div>
